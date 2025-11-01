@@ -772,7 +772,7 @@ select.form-control {
 /* src/styles/Header.css */
 
 .header {
-  background: var(--color-dark-grey);
+  background: var(--color-deep-charcoal);
   color: var(--color-text);
   padding: var(--space-20) 0;
   position: fixed;
