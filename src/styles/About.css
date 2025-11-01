@@ -815,8 +815,9 @@ select.form-control {
 
 
 .about {
-  background-color: var(--color-forest-green);
-  padding: calc(var(--space-32) * 4) var(--space-32);
+  background-color: var(--color-surface);
+  padding: calc(var(--space-32) * 2) var(--space-32);
+  transition: background-color var(--duration-normal) var(--ease-standard);
 }
 
 .container {
@@ -833,7 +834,7 @@ select.form-control {
   display: inline-block;
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
-  color: var(--color-accent);
+  color: var(--color-primary);
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin-bottom: var(--space-16);
@@ -864,22 +865,24 @@ select.form-control {
 }
 
 .stat-box {
-  background: var(--color-charcoal);
+  background: var(--color-background);
   padding: var(--space-32);
-  border-radius: 0;
+  border-radius: var(--radius-lg);
   text-align: center;
   transition: all var(--duration-normal) var(--ease-standard);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
 }
 
 .stat-box:hover {
-  border-color: var(--color-accent);
+  border-color: var(--color-primary);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
 }
 
 .stat-number {
   font-size: 44px;
   font-weight: var(--font-weight-bold);
-  color: var(--color-accent);
+  color: var(--color-primary);
   line-height: 1;
   margin-bottom: var(--space-12);
 }

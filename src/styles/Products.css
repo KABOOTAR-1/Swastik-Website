@@ -773,7 +773,8 @@ select.form-control {
 
 .products {
   background-color: var(--color-background);
-  padding: calc(var(--space-32) * 4) var(--space-32);
+  padding: calc(var(--space-32) * 2) var(--space-32);
+  transition: background-color var(--duration-normal) var(--ease-standard);
 }
 
 .products .section-title {
@@ -795,30 +796,37 @@ select.form-control {
 }
 
 .product-card {
-  background: var(--color-charcoal-light);
-  border-radius: 0;
+  background: var(--color-surface);
+  border-radius: var(--radius-base);
   overflow: hidden;
-  transition: border-color var(--duration-normal) var(--ease-standard);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all var(--duration-normal) var(--ease-standard);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
 }
 
 .product-card:hover {
-  border-color: var(--color-accent);
+  border-color: var(--color-primary);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
 }
 
 .product-image {
   width: 100%;
   height: 200px;
-  background: var(--color-secondary);
+  background: var(--color-secondary-main);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text);
+  color: var(--color-white);
   font-size: 48px;
 }
 
 .product-info {
-  padding: var(--space-32);
+  padding: var(--space-24);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .product-name {
@@ -845,11 +853,11 @@ select.form-control {
 }
 
 .spec-item {
-  background: var(--color-charcoal);
+  background: var(--color-background);
   padding: var(--space-10);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   color: var(--color-text-secondary);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
 }
 
 .spec-label {
@@ -860,28 +868,29 @@ select.form-control {
 
 .btn-learn-more {
   background-color: transparent;
-  color: var(--color-accent);
+  color: var(--color-primary);
   padding: var(--space-12) var(--space-24);
-  border-radius: 0;
+  border-radius: var(--radius-base);
   text-decoration: none;
   font-weight: var(--font-weight-semibold);
   transition: all var(--duration-normal) var(--ease-standard);
-  border: 1px solid var(--color-accent);
+  border: 1px solid var(--color-primary);
   cursor: pointer;
   width: 100%;
   text-align: center;
   font-size: var(--font-size-sm);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  margin-top: auto;
 }
 
 .btn-learn-more:hover {
-  background-color: var(--color-accent);
+  background-color: var(--color-primary);
   color: var(--color-white);
 }
 
 .btn-learn-more:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 

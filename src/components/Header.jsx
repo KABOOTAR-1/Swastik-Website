@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-scroll';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import ThemeToggle from './ThemeToggle';
 import '../styles/Header.css';
 
 const Header = () => {
@@ -89,8 +90,11 @@ const Header = () => {
           </ul>
         </div>
 
-        <div className="hamburger" onClick={toggleMenu}>
-          {isOpen ? <FaTimes /> : <FaBars />}
+        <div className="header-controls">
+          <ThemeToggle />
+          <div className="hamburger" onClick={toggleMenu}>
+            {isOpen ? <FaTimes /> : <FaBars />}
+          </div>
         </div>
       </nav>
     </header>

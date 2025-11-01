@@ -8,7 +8,7 @@ import Features from './components/Features';
 import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import './App.css';
+import './styles/App.css';
 
 function App() {
   return (

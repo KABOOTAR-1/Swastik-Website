@@ -772,23 +772,29 @@ select.form-control {
 /* src/styles/Header.css */
 
 .header {
-  background: var(--color-deep-charcoal);
-  color: var(--color-text);
-  padding: var(--space-20) 0;
+  background: var(--color-dark-900);
+  color: var(--color-gray-100);
+  padding: var(--space-12) 0;
   position: fixed;
   width: 100%;
   top: 0;
   z-index: 1000;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--duration-normal) var(--ease-standard);
 }
 
 .navbar {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 var(--space-32);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 1rem 2rem;
+  width: 100%;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .logo {
@@ -798,21 +804,21 @@ select.form-control {
   align-items: center;
   gap: var(--space-8);
   cursor: pointer;
-  color: var(--color-text);
+  color: var(--color-gray-100);
   letter-spacing: -0.01em;
 }
 
 .logo-icon {
   width: 36px;
   height: 36px;
-  background: var(--color-forest-green);
-  border-radius: 0;
+  background: transparent;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-xl);
-  color: var(--color-white);
+  color: var(--color-primary-main);
 }
 
 .nav-links-wrapper {
@@ -829,7 +835,7 @@ select.form-control {
 }
 
 .nav-links a {
-  color: var(--color-text-secondary);
+  color: var(--color-gray-300);
   text-decoration: none;
   font-size: var(--font-size-sm);
   transition: color var(--duration-normal) var(--ease-standard);
@@ -837,15 +843,16 @@ select.form-control {
   font-weight: var(--font-weight-medium);
 }
 
-.nav-links a:hover {
-  color: var(--color-accent);
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--color-primary);
 }
 
 .nav-links a.cta-button {
   background-color: var(--color-primary);
-  color: var(--color-deep-charcoal);
+  color: var(--color-white);
   padding: var(--space-10) var(--space-24);
-  border-radius: 0;
+  border-radius: var(--radius-base);
   text-decoration: none;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
@@ -856,7 +863,7 @@ select.form-control {
 
 .nav-links a.cta-button:hover {
   background-color: var(--color-primary-hover);
-  color: var(--color-deep-charcoal);
+  color: var(--color-white);
 }
 
 .cta-button:focus-visible {
@@ -868,7 +875,7 @@ select.form-control {
   display: none;
   font-size: var(--font-size-xl);
   cursor: pointer;
-  color: var(--color-text);
+  color: var(--color-gray-100);
 }
 
 @media (max-width: 768px) {

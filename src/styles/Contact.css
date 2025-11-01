@@ -772,9 +772,10 @@ select.form-control {
 /* src/styles/Contact.css */
 
 .contact {
-  background: var(--color-charcoal-light);
-  color: var(--color-white);
-  padding: calc(var(--space-32) * 4) var(--space-32);
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: calc(var(--space-32) * 2) var(--space-32);
+  transition: all var(--duration-normal) var(--ease-standard);
 }
 
 .contact-content {
@@ -791,14 +792,14 @@ select.form-control {
   margin-bottom: var(--space-24);
   line-height: 1.1;
   letter-spacing: -0.02em;
-  color: var(--color-white);
+  color: var(--color-text);
 }
 
 .contact-info>p {
   margin-bottom: calc(var(--space-32) + var(--space-16));
   font-size: var(--font-size-lg);
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--color-text-secondary);
 }
 
 .contact-item {
@@ -815,8 +816,8 @@ select.form-control {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 0;
+  background: var(--color-secondary-main);
+  border-radius: var(--radius-sm);
   color: var(--color-white);
   flex-shrink: 0;
 }
@@ -825,7 +826,7 @@ select.form-control {
   margin-bottom: var(--space-8);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-white);
+  color: var(--color-text);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-size: var(--font-size-xs);
@@ -833,7 +834,7 @@ select.form-control {
 
 .contact-details p {
   font-size: var(--font-size-base);
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--color-text-secondary);
 }
 
 .contact-form {
@@ -851,26 +852,26 @@ select.form-control {
   margin-bottom: var(--space-8);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-sm);
-  color: var(--color-white);
+  color: var(--color-text);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .form-group input,
 .form-group textarea {
-  padding: var(--space-16);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 0;
+  padding: var(--space-12);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
-  background-color: rgba(0, 0, 0, 0.3);
-  color: var(--color-white);
+  background-color: var(--color-surface);
+  color: var(--color-text);
   transition: all var(--duration-normal) var(--ease-standard);
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-secondary);
 }
 
 .form-group textarea {
@@ -883,15 +884,15 @@ select.form-control {
 .form-group textarea:focus {
   outline: none;
   border-color: var(--color-primary);
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--color-background);
 }
 
 .btn-submit {
   background-color: var(--color-primary);
   color: var(--color-white);
-  padding: var(--space-16) calc(var(--space-32) + var(--space-16));
+  padding: var(--space-16);
   border: none;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
   transition: background-color var(--duration-normal) var(--ease-standard);
@@ -906,7 +907,7 @@ select.form-control {
 }
 
 .btn-submit:focus-visible {
-  outline: 2px solid var(--color-white);
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 
