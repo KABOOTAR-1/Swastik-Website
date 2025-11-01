@@ -1,7 +1,6 @@
-// src/components/Features.jsx
+// components/Features.jsx
 import React from 'react';
 import { FaCheckCircle, FaClock, FaHeadset, FaDollarSign } from 'react-icons/fa';
-import '../styles/Features.css';
 
 const Features = () => {
   const features = [

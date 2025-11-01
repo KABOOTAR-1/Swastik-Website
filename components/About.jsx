@@ -1,6 +1,5 @@
-// src/components/About.jsx
+// components/About.jsx
 import React from 'react';
-import '../styles/About.css';
 
 const About = () => {
   const stats = [

@@ -1,7 +1,6 @@
-// src/components/Contact.jsx
+// components/Contact.jsx
 import React, { useState } from 'react';
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaIndustry } from 'react-icons/fa';
-import '../styles/Contact.css';
 
 const Contact = () => {
   const [formData, setFormData] = useState({

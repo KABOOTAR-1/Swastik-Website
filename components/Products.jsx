@@ -1,7 +1,6 @@
-// src/components/Products.jsx
+// components/Products.jsx
 import React from 'react';
 import { FaBox, FaCog, FaWater, FaLeaf, FaTools } from 'react-icons/fa';
-import '../styles/Products.css';
 
 const Products = () => {
   const products = [

@@ -1,9 +1,8 @@
-// src/components/Header.jsx
+// components/Header.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-scroll';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import ThemeToggle from './ThemeToggle';
-import '../styles/Header.css';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,8 +19,7 @@ const Header = () => {
     <header className="header">
       <nav className="navbar">
         <div className="logo">
-          <div className="logo-icon">⚙️</div>
-          <span>SKYU</span>
+          <img src="/swastik_logo_full.png" alt="Swastik Logo" className="logo-icon" />
         </div>
 
         <div className="nav-links-wrapper">

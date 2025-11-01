@@ -1,8 +1,7 @@
-// src/components/Hero.jsx
+// components/Hero.jsx
 import React from 'react';
 import { Link } from 'react-scroll';
 import { FaArrowRight } from 'react-icons/fa';
-import '../styles/Hero.css';
 
 const Hero = () => {
   return (
