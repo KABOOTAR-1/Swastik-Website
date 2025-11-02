@@ -38,7 +38,7 @@ const Contact = () => {
             </div>
             <div className="contact-details">
               <h4>Corporate Office</h4>
-              <p>2A, Vanasthali Marg, Jaipur, Rajasthan</p>
+              <p><a href="https://maps.app.goo.gl/ej1HwtRCW7QxELd58" target="_blank" rel="noopener noreferrer">2A, Vanasthali Marg, Jaipur, Rajasthan, near Sindhi Camp, 302001</a></p>
             </div>
           </div>
 
@@ -48,7 +48,7 @@ const Contact = () => {
             </div>
             <div className="contact-details">
               <h4>Manufacturing Facility</h4>
-              <p>Vishwakarma Industrial Area, Road No 14, Jaipur</p>
+              <p><a href="https://maps.app.goo.gl/BiuM81spZRvnQh9s8" target="_blank" rel="noopener noreferrer">G-1 818(k), Road No 14, Vishwakarma Industrial Area, Jaipur, Rajasthan, 302013</a></p>
             </div>
           </div>
 
@@ -58,7 +58,8 @@ const Contact = () => {
             </div>
             <div className="contact-details">
               <h4>Phone</h4>
-              <p>+91-XXX-XXX-XXXX</p>
+              <p><strong>Mobile:</strong> <a href="tel:+919414716806">+91-9414716806</a> | <a href="tel:+919414460805">+91-9414460805</a></p>
+              <p><strong>Landline:</strong> <a href="tel:+9101412361960">0141-2361960</a> | <a href="tel:+9101412332002">0141-2332002</a></p>
             </div>
           </div>
 

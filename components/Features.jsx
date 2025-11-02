@@ -33,7 +33,7 @@ const Features = () => {
   return (
     <section className="features" id="features">
       <div className="container">
-        <h2 className="section-title">Why Choose SKYU?</h2>
+        <h2 className="section-title">Why Choose Swastik Krishi Yantra Udyog?</h2>
         <div className="features-grid">
           {features.map((feature) => (
             <div key={feature.id} className="feature-box">

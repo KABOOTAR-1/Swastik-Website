@@ -1,11 +1,12 @@
 // components/Header.jsx
-import React, { useState } from 'react';
-import { Link } from 'react-scroll';
+import React, { useState, useRef, useEffect } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import ThemeToggle from './ThemeToggle';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef(null);
+  const controlsRef = useRef(null);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -15,80 +16,76 @@ const Header = () => {
     setIsOpen(false);
   };
 
+  const handleHomeClick = (e) => {
+    // If already on home page, prevent reload and scroll to top
+    if (window.location.pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Update URL to remove hash
+      window.history.pushState({}, '', '/');
+    }
+  };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Don't close if clicking on controls (theme toggle or hamburger)
+      if (controlsRef.current && controlsRef.current.contains(event.target)) {
+        return;
+      }
+
+      // Close if clicking outside the menu
+      if (menuRef.current && !menuRef.current.contains(event.target) && isOpen) {
+        closeMenu();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
     <header className="header">
       <nav className="navbar">
         <div className="logo">
-          <img src="/swastik_logo_full.png" alt="Swastik Logo" className="logo-icon" />
+          <a href="/" onClick={handleHomeClick}>
+            <img src="/swastik_logo_full.png" alt="Swastik Logo" className="logo-icon" />
+          </a>
         </div>
 
-        <div className="nav-links-wrapper">
+        <div className="nav-links-wrapper" ref={menuRef}>
           <ul className={`nav-links ${isOpen ? 'active' : ''}`}>
             <li>
-              <Link
-                to="home"
-                spy={true}
-                smooth={true}
-                offset={-70}
-                duration={500}
-                onClick={closeMenu}
-              >
+              <a href="/" onClick={handleHomeClick}>
                 Home
-              </Link>
+              </a>
             </li>
             <li>
-              <Link
-                to="about"
-                spy={true}
-                smooth={true}
-                offset={-70}
-                duration={500}
-                onClick={closeMenu}
-              >
+              <a href="/#about">
                 About
-              </Link>
+              </a>
             </li>
             <li>
-              <Link
-                to="products"
-                spy={true}
-                smooth={true}
-                offset={-70}
-                duration={500}
-                onClick={closeMenu}
-              >
+              <a href="/products">
                 Products
-              </Link>
+              </a>
             </li>
             <li>
-              <Link
-                to="features"
-                spy={true}
-                smooth={true}
-                offset={-70}
-                duration={500}
-                onClick={closeMenu}
-              >
+              <a href="/#features">
                 Why Us
-              </Link>
+              </a>
             </li>
             <li>
-              <Link
-                to="contact"
-                spy={true}
-                smooth={true}
-                offset={-70}
-                duration={500}
-                onClick={closeMenu}
-                className="cta-button"
-              >
+              <a href="/#contact" className="cta-button">
                 Contact
-              </Link>
+              </a>
             </li>
           </ul>
         </div>
 
-        <div className="header-controls">
+        <div className="header-controls" ref={controlsRef}>
           <ThemeToggle />
           <div className="hamburger" onClick={toggleMenu}>
             {isOpen ? <FaTimes /> : <FaBars />}

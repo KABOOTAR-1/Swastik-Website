@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
@@ -10,6 +10,113 @@ import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 
 export default function Home() {
+  useEffect(() => {
+    let isScrollingToHash = false;
+    let scrollTimeout = null;
+
+    // Function to handle scrolling to hash
+    const scrollToHash = (hash, useSmooth = true) => {
+      if (hash) {
+        const targetId = hash.substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          const header = document.querySelector('.header');
+          const headerHeight = header ? header.offsetHeight : 80;
+          const elementPosition = targetElement.offsetTop;
+          const offsetPosition = elementPosition - headerHeight;
+
+          // Set flag to disable scroll spy during programmatic scroll
+          isScrollingToHash = true;
+
+          // Clear any existing timeout
+          if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+          }
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: useSmooth ? 'smooth' : 'auto'
+          });
+
+          // Re-enable scroll spy after scroll animation completes
+          scrollTimeout = setTimeout(() => {
+            isScrollingToHash = false;
+          }, useSmooth ? 1000 : 100);
+        }
+      }
+    };
+
+    // Prevent default browser scroll behavior on initial load
+    if (window.location.hash) {
+      window.history.scrollRestoration = 'manual';
+    }
+
+    // Handle initial page load with hash
+    if (window.location.hash) {
+      // Scroll to top immediately to prevent browser's default scroll
+      window.scrollTo(0, 0);
+
+      // Use setTimeout to ensure DOM is fully loaded, then scroll instantly
+      setTimeout(() => {
+        scrollToHash(window.location.hash, false);
+      }, 100);
+    } else {
+      window.scrollTo(0, 0);
+    }
+
+    // Handle hash changes (when clicking links)
+    const handleHashChange = () => {
+      scrollToHash(window.location.hash);
+    };
+
+    // Scroll spy to update URL based on visible section
+    const sections = document.querySelectorAll('section[id]');
+    const header = document.querySelector('.header');
+    const headerHeight = header ? header.offsetHeight : 80;
+
+    const handleScroll = () => {
+      // Don't update hash if we're currently scrolling to a hash
+      if (isScrollingToHash) {
+        return;
+      }
+
+      const scrollPosition = window.scrollY + headerHeight;
+
+      // Check if we're at the very top
+      if (window.scrollY < 200) {
+        if (window.location.hash) {
+          window.history.pushState({}, '', '/');
+        }
+        return;
+      }
+
+      // Find which section is currently in view
+      sections.forEach((section) => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.offsetHeight;
+        const sectionId = section.getAttribute('id');
+
+        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+          const newHash = `#${sectionId}`;
+          if (window.location.hash !== newHash) {
+            window.history.pushState({}, '', `/${newHash}`);
+          }
+        }
+      });
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+    };
+  }, []);
+
   return (
     <div className="App">
       <Head>
@@ -47,8 +154,8 @@ export default function Home() {
         <link rel="canonical" href="https://swastikjaipur.com" />
 
         {/* Favicon and Icons */}
-        <link rel="icon" href="/logo.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/logo.png" />
+        <link rel="icon" href="/swastik_logo.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/swastik_logo.png" />
         <link rel="manifest" href="/manifest.json" />
 
         {/* Fonts */}

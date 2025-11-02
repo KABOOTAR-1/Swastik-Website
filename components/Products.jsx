@@ -1,8 +1,42 @@
 // components/Products.jsx
-import React from 'react';
+import React, { useRef } from 'react';
+import Link from 'next/link';
 import { FaBox, FaCog, FaWater, FaLeaf, FaTools } from 'react-icons/fa';
 
 const Products = () => {
+  const scrollRef = useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
+  const [canScrollRight, setCanScrollRight] = React.useState(true);
+
+  const checkScrollButtons = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setCanScrollLeft(scrollLeft > 10); // Small threshold to avoid showing when barely scrolled
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
+
+  React.useEffect(() => {
+    checkScrollButtons();
+    const handleResize = () => checkScrollButtons();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+      setTimeout(checkScrollButtons, 300);
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+      setTimeout(checkScrollButtons, 300);
+    }
+  };
+
   const products = [
     {
       id: 1,
@@ -83,25 +117,44 @@ const Products = () => {
       <div className="container">
         <h2 className="section-title">Our Products</h2>
         <p className="section-subtitle">Quality machinery built for durability, performance, and reliability</p>
-        <div className="products-grid">
-          {products.map((product) => (
-            <div key={product.id} className="product-card">
-              <div className="product-image">{product.icon}</div>
-              <div className="product-info">
-                <div className="product-name">{product.name}</div>
-                <div className="product-description">{product.description}</div>
-                <div className="product-specs">
-                  {product.specs.map((spec, index) => (
-                    <div key={index} className="spec-item">
-                      <div className="spec-label">{spec.label}</div>
-                      <div>{spec.value}</div>
-                    </div>
-                  ))}
+        <div className="products-container">
+          {canScrollLeft && (
+            <button className="scroll-arrow scroll-arrow-left" onClick={scrollLeft} aria-label="Scroll left">
+              ‹
+            </button>
+          )}
+          <div className="products-grid" ref={scrollRef} onScroll={checkScrollButtons}>
+            {products.map((product) => (
+              <div key={product.id} className="product-card">
+                <div className="product-image">{product.icon}</div>
+                <div className="product-info">
+                  <div className="product-name">{product.name}</div>
+                  <div className="product-description">{product.description}</div>
+                  <div className="product-specs">
+                    {product.specs.map((spec, index) => (
+                      <div key={index} className="spec-item">
+                        <div className="spec-label">{spec.label}</div>
+                        <div>{spec.value}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <Link href={`/products/${product.id}`} className="btn-learn-more">
+                    Learn More
+                  </Link>
                 </div>
-                <button className="btn-learn-more">Learn More</button>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          {canScrollRight && (
+            <button className="scroll-arrow scroll-arrow-right" onClick={scrollRight} aria-label="Scroll right">
+              ›
+            </button>
+          )}
+        </div>
+        <div className="view-all-container">
+          <Link href="/products" className="btn-primary">
+            View All Products
+          </Link>
         </div>
       </div>
     </section>

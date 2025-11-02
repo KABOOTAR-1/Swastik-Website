@@ -338,6 +338,7 @@ html {
   background-color: var(--color-background);
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -779,6 +780,11 @@ select.form-control {
 /* END PERPLEXITY DESIGN SYSTEM */
 /* src/styles/Header.css */
 
+/* Fix for anchor link scroll offset */
+section[id] {
+  scroll-margin-top: 100px;
+}
+
 .header {
   background: var(--color-white);
   color: var(--color-slate-900);
@@ -876,15 +882,28 @@ select.form-control {
 
 .hamburger {
   display: none;
-  font-size: var(--font-size-xl);
+  font-size: 1.5rem;
   cursor: pointer;
-  color: var(--color-gray-100);
+  color: var(--color-black);
+  padding: 0.5rem;
+  border-radius: var(--radius-full);
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--duration-normal) var(--ease-standard);
+}
+
+[data-color-scheme="dark"] .hamburger {
+  color: var(--color-gray-200);
+}
+
+.hamburger:hover {
+  background-color: var(--color-secondary);
 }
 
 @media (max-width: 768px) {
   .nav-links {
     position: absolute;
-    top: 72px;
+    top: 100%;
     left: 0;
     width: 100%;
     background: var(--color-surface);
@@ -914,7 +933,7 @@ select.form-control {
   }
 
   .hamburger {
-    display: block;
+    display: flex;
   }
 
   .navbar {
