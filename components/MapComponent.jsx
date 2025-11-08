@@ -53,16 +53,16 @@ const MapComponent = () => {
         shadowSize: [41, 41]
     });
 
-    // Coordinates for both locations
+    // Coordinates for both locations (verified from Google Maps)
     const corporateOffice = {
-        position: [26.9124, 75.7873],
+        position: [26.92029, 75.80175],
         name: 'Corporate Office',
         address: '2 A Vanasthali Marg, S C Road, Jaipur, Rajasthan 302001',
         link: 'https://maps.app.goo.gl/ej1HwtRCW7QxELd58'
     };
 
     const manufacturingFacility = {
-        position: [26.8467, 75.8648],
+        position: [26.9957070054532, 75.77252164706485],
         name: 'Manufacturing Facility',
         address: 'G1-818k, Road No. 14, Vishwakarma Industrial Area, Murlipura, Jaipur, Rajasthan 302013',
         link: 'https://maps.app.goo.gl/BiuM81spZRvnQh9s8'
