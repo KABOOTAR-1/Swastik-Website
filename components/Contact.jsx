@@ -38,7 +38,7 @@ const Contact = () => {
             </div>
             <div className="contact-details">
               <h4>Corporate Office</h4>
-              <p><a href="https://maps.app.goo.gl/ej1HwtRCW7QxELd58" target="_blank" rel="noopener noreferrer">2A, Vanasthali Marg, Jaipur, Rajasthan, near Sindhi Camp, 302001</a></p>
+              <p><a href="https://maps.app.goo.gl/ej1HwtRCW7QxELd58" target="_blank" rel="noopener noreferrer">2 A Vanasthali Marg, S C Road, Jaipur, Rajasthan 302001</a></p>
             </div>
           </div>
 
@@ -48,7 +48,7 @@ const Contact = () => {
             </div>
             <div className="contact-details">
               <h4>Manufacturing Facility</h4>
-              <p><a href="https://maps.app.goo.gl/BiuM81spZRvnQh9s8" target="_blank" rel="noopener noreferrer">G-1 818(k), Road No 14, Vishwakarma Industrial Area, Jaipur, Rajasthan, 302013</a></p>
+              <p><a href="https://maps.app.goo.gl/BiuM81spZRvnQh9s8" target="_blank" rel="noopener noreferrer">G1-818k, Road No. 14, Vishwakarma Industrial Area, Murlipura, Jaipur, Rajasthan 302013</a></p>
             </div>
           </div>
 
