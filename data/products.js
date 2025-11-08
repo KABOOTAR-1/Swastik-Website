@@ -1,10 +1,16 @@
-import { FaBox, FaCog, FaWater, FaLeaf, FaTools } from 'react-icons/fa';
+import { getFirestore, collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 
-export const products = [
+// Cache for Firebase products
+let productsCache = null;
+let cacheTimestamp = null;
+const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
+
+// Fallback products (used when Firebase data is less than 6)
+export const fallbackProducts = [
   {
     id: 1,
     name: 'Lift Type C Mixer',
-    icon: <FaBox />,
+    iconName: 'FaBox',
     description: 'Heavy-duty construction mixer for concrete floor slabs in multistory buildings.',
     specs: [
       { label: 'Type', value: 'Diesel/Electric' },
@@ -31,7 +37,7 @@ export const products = [
   {
     id: 2,
     name: 'Cement Concrete Mixer',
-    icon: <FaCog />,
+    iconName: 'FaCog',
     description: 'Robust and compact mixer for small to medium-scale construction projects.',
     specs: [
       { label: 'Capacity', value: '100-200L' },
@@ -58,7 +64,7 @@ export const products = [
   {
     id: 3,
     name: 'Hopper Type Mixer',
-    icon: <FaWater />,
+    iconName: 'FaWater',
     description: 'Mechanical mixer with mobility features for on-site concrete mixing.',
     specs: [
       { label: 'Capacity', value: '150-250L' },
@@ -85,7 +91,7 @@ export const products = [
   {
     id: 4,
     name: 'Agricultural Equipment',
-    icon: <FaLeaf />,
+    iconName: 'FaLeaf',
     description: 'Wide range of farming machinery for soil preparation and harvesting.',
     specs: [
       { label: 'Types', value: '20+ Models' },
@@ -112,7 +118,7 @@ export const products = [
   {
     id: 5,
     name: 'Pumps & Lifting Equipment',
-    icon: <FaWater />,
+    iconName: 'FaWater',
     description: 'High-capacity pumps and lifting systems for construction and water management.',
     specs: [
       { label: 'Types', value: 'Submersible/Centrifugal' },
@@ -139,7 +145,7 @@ export const products = [
   {
     id: 6,
     name: 'Custom Solutions',
-    icon: <FaTools />,
+    iconName: 'FaTools',
     description: 'Tailored machinery solutions designed to meet specific industrial needs.',
     specs: [
       { label: 'Design', value: 'Customizable' },
@@ -164,3 +170,78 @@ export const products = [
     ]
   },
 ];
+
+// Default icon mapping based on category (returns icon name as string)
+const getCategoryIconName = (category) => {
+  const categoryLower = category?.toLowerCase() || '';
+  if (categoryLower.includes('mixer') || categoryLower.includes('concrete')) return 'FaBox';
+  if (categoryLower.includes('agricultural') || categoryLower.includes('farm')) return 'FaLeaf';
+  if (categoryLower.includes('pump') || categoryLower.includes('water')) return 'FaWater';
+  if (categoryLower.includes('custom') || categoryLower.includes('solution')) return 'FaTools';
+  return 'FaCog';
+};
+
+// Function to fetch products from Firebase with caching
+export const fetchProducts = async () => {
+  // Check if we have valid cached data
+  if (productsCache && cacheTimestamp && (Date.now() - cacheTimestamp < CACHE_DURATION)) {
+    console.log('🔄 [Products Cache] Serving cached products data');
+    return productsCache;
+  }
+
+  try {
+    console.log('📡 [Products Cache] Fetching fresh data from Firebase');
+    const db = getFirestore();
+    const productsRef = collection(db, 'products');
+    const q = query(productsRef, orderBy('createdAt', 'desc'), limit(6));
+    const querySnapshot = await getDocs(q);
+
+    const firebaseProducts = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+
+      // Transform Firebase data to match our product structure
+      firebaseProducts.push({
+        id: doc.id,
+        name: data.name,
+        description: data.description,
+        image: data.image,
+        category: data.category,
+        price: data.price,
+        iconName: getCategoryIconName(data.category),
+        // Transform models array to specs array (use first model's specs)
+        specs: data.models && data.models.length > 0 && data.models[0].specs
+          ? data.models[0].specs
+          : [{ label: 'Category', value: data.category || 'N/A' }],
+        features: data.features || [],
+        applications: data.applications || [],
+        models: data.models || [], // Keep models for detail page
+        fromFirebase: true // Flag to identify Firebase products
+      });
+    });
+
+    // If we have less than 6 products from Firebase, fill with fallback
+    const productsNeeded = 6 - firebaseProducts.length;
+    let finalProducts;
+    if (productsNeeded > 0) {
+      const fallbackToUse = fallbackProducts.slice(0, productsNeeded);
+      finalProducts = [...firebaseProducts, ...fallbackToUse];
+    } else {
+      finalProducts = firebaseProducts;
+    }
+
+    // Cache the results
+    productsCache = finalProducts;
+    cacheTimestamp = Date.now();
+    console.log('💾 [Products Cache] Data cached for 10 minutes');
+
+    return finalProducts;
+  } catch (error) {
+    console.error('Error fetching products from Firebase:', error);
+    // Return fallback products if Firebase fails
+    return fallbackProducts;
+  }
+};
+
+// Export for backward compatibility (using fallback by default for SSR)
+export const products = fallbackProducts;

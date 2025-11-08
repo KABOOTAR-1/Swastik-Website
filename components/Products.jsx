@@ -1,12 +1,33 @@
 // components/Products.jsx
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaBox, FaCog, FaWater, FaLeaf, FaTools } from 'react-icons/fa';
+import { fetchProducts } from '../data/products';
+import ProductIcon from './ProductIcon';
+import ImageKitImage from './ImageKitImage';
+import { thumbnailTransformations } from '../config/imagekit';
 
 const Products = () => {
   const scrollRef = useRef(null);
-  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
-  const [canScrollRight, setCanScrollRight] = React.useState(true);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [products, setProducts] = useState([]);
+
+  // Fetch products from Firebase on component mount
+  useEffect(() => {
+    const loadProducts = async () => {
+      console.log('📦 [Products Component] Fetching products data...');
+      try {
+        const fetchedProducts = await fetchProducts();
+        console.log(`✅ [Products Component] Products data loaded, rendering ${fetchedProducts.length} products`);
+        console.log(`   🖼️  Images will load in parallel as they become available`);
+        setProducts(fetchedProducts);
+      } catch (error) {
+        console.error('Error loading products:', error);
+      }
+    };
+
+    loadProducts();
+  }, []);
 
   const checkScrollButtons = () => {
     if (scrollRef.current) {
@@ -16,12 +37,12 @@ const Products = () => {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     checkScrollButtons();
     const handleResize = () => checkScrollButtons();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [products]);
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -37,118 +58,96 @@ const Products = () => {
     }
   };
 
-  const products = [
-    {
-      id: 1,
-      name: 'Lift Type C Mixer',
-      icon: <FaBox />,
-      description: 'Heavy-duty construction mixer for concrete floor slabs in multistory buildings.',
-      specs: [
-        { label: 'Type', value: 'Diesel/Electric' },
-        { label: 'Capacity', value: '200-300L' },
-        { label: 'Power', value: '5-6.5 HP' },
-        { label: 'Weight', value: '800-950kg' },
-      ],
-    },
-    {
-      id: 2,
-      name: 'Cement Concrete Mixer',
-      icon: <FaCog />,
-      description: 'Robust and compact mixer for small to medium-scale construction projects.',
-      specs: [
-        { label: 'Capacity', value: '100-200L' },
-        { label: 'Motor Type', value: 'Diesel/Electric' },
-        { label: 'Speed', value: '18-20 RPM' },
-        { label: 'Dimensions', value: 'Compact Design' },
-      ],
-    },
-    {
-      id: 3,
-      name: 'Hopper Type Mixer',
-      icon: <FaWater />,
-      description: 'Mechanical mixer with mobility features for on-site concrete mixing.',
-      specs: [
-        { label: 'Capacity', value: '150-250L' },
-        { label: 'Hopper', value: '30" Drum' },
-        { label: 'Wheels', value: 'Pneumatic' },
-        { label: 'Portability', value: 'High Mobility' },
-      ],
-    },
-    {
-      id: 4,
-      name: 'Agricultural Equipment',
-      icon: <FaLeaf />,
-      description: 'Wide range of farming machinery for soil preparation and harvesting.',
-      specs: [
-        { label: 'Types', value: '20+ Models' },
-        { label: 'Application', value: 'Multi-purpose' },
-        { label: 'Durability', value: 'High-Grade' },
-        { label: 'Support', value: '24/7 Service' },
-      ],
-    },
-    {
-      id: 5,
-      name: 'Pumps & Lifting Equipment',
-      icon: <FaWater />,
-      description: 'High-capacity pumps and lifting systems for construction and water management.',
-      specs: [
-        { label: 'Types', value: 'Submersible/Centrifugal' },
-        { label: 'Capacity', value: '500-5000 LPH' },
-        { label: 'Material', value: 'Cast Iron' },
-        { label: 'Efficiency', value: 'High Performance' },
-      ],
-    },
-    {
-      id: 6,
-      name: 'Custom Solutions',
-      icon: <FaTools />,
-      description: 'Tailored machinery solutions designed to meet specific industrial needs.',
-      specs: [
-        { label: 'Design', value: 'Customizable' },
-        { label: 'Timeline', value: 'Quick Turnaround' },
-        { label: 'Quality', value: 'Premium Grade' },
-        { label: 'Support', value: 'Full Warranty' },
-      ],
-    },
-  ];
-
   return (
     <section className="products" id="products">
       <div className="container">
         <h2 className="section-title">Our Products</h2>
         <p className="section-subtitle">Quality machinery built for durability, performance, and reliability</p>
         <div className="products-container">
-          {canScrollLeft && (
-            <button className="scroll-arrow scroll-arrow-left" onClick={scrollLeft} aria-label="Scroll left">
-              ‹
-            </button>
-          )}
-          <div className="products-grid" ref={scrollRef} onScroll={checkScrollButtons}>
-            {products.map((product) => (
-              <div key={product.id} className="product-card">
-                <div className="product-image">{product.icon}</div>
-                <div className="product-info">
-                  <div className="product-name">{product.name}</div>
-                  <div className="product-description">{product.description}</div>
-                  <div className="product-specs">
-                    {product.specs.map((spec, index) => (
-                      <div key={index} className="spec-item">
-                        <div className="spec-label">{spec.label}</div>
-                        <div>{spec.value}</div>
+          {products.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '40px' }}>
+              <p>Loading products...</p>
+            </div>
+          ) : (
+            <>
+              {canScrollLeft && (
+                <button className="scroll-arrow scroll-arrow-left" onClick={scrollLeft} aria-label="Scroll left">
+                  ‹
+                </button>
+              )}
+              <div className="products-grid" ref={scrollRef} onScroll={checkScrollButtons}>
+                {products.map((product) => (
+                  <div key={product.id} className="product-card">
+                    <div className="product-image" style={{ position: 'relative', backgroundColor: '#f0f0f0' }}>
+                      {product.image ? (
+                        (() => {
+                          const startTime = performance.now();
+                          console.log(`🖼️ [Products Component] Started loading image for: ${product.name}`);
+                          console.log(`   📸 Image URL: ${product.image}`);
+                          console.log(`   ⏱️  Start time: ${new Date().toLocaleTimeString()}`);
+                          console.log(`   🔄 Loading via ImageKit with auto-optimization`);
+                          return (
+                            <ImageKitImage
+                              src={product.image}
+                              alt={product.name}
+                              transformation={thumbnailTransformations}
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                opacity: 0,
+                                transition: 'opacity 0.3s ease-in'
+                              }}
+                              loading="lazy"
+                              onLoad={(e) => {
+                                const endTime = performance.now();
+                                const loadTime = ((endTime - startTime) / 1000).toFixed(2);
+                                console.log(`✅ [Products Component] Successfully loaded image for: ${product.name}`);
+                                console.log(`   ⏱️  Load time: ${loadTime} seconds`);
+                                console.log(`   🚀 ImageKit optimized & CDN delivered`);
+                                console.log(`   ✨ Image now visible to user`);
+
+                                // Fade in the image
+                                e.target.style.opacity = '1';
+                              }}
+                              onError={(e) => {
+                                const endTime = performance.now();
+                                const loadTime = ((endTime - startTime) / 1000).toFixed(2);
+                                console.error(`❌ [Products Component] Failed to load image for: ${product.name}`);
+                                console.error(`   ⏱️  Failed after: ${loadTime} seconds`);
+                                console.error(`   Error details:`, e);
+                              }}
+                            />
+                          );
+                        })()
+                      ) : (
+                        <ProductIcon iconName={product.iconName} />
+                      )}
+                    </div>
+                    <div className="product-info">
+                      <div className="product-name">{product.name}</div>
+                      <div className="product-description">{product.description}</div>
+                      <div className="product-specs">
+                        {product.specs.map((spec, index) => (
+                          <div key={index} className="spec-item">
+                            <div className="spec-label">{spec.label}</div>
+                            <div>{spec.value}</div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                      <Link href={`/products/${product.id}`} className="btn-learn-more">
+                        Learn More
+                      </Link>
+                    </div>
                   </div>
-                  <Link href={`/products/${product.id}`} className="btn-learn-more">
-                    Learn More
-                  </Link>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
-          {canScrollRight && (
-            <button className="scroll-arrow scroll-arrow-right" onClick={scrollRight} aria-label="Scroll right">
-              ›
-            </button>
+              {canScrollRight && (
+                <button className="scroll-arrow scroll-arrow-right" onClick={scrollRight} aria-label="Scroll right">
+                  ›
+                </button>
+              )}
+            </>
           )}
         </div>
         <div className="view-all-container">

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { IKUpload } from 'imagekitio-react';
+import imageCompression from 'browser-image-compression';
 
 export default function AddProduct() {
   const [formData, setFormData] = useState({
@@ -17,6 +19,44 @@ export default function AddProduct() {
   const [message, setMessage] = useState('');
   const [imagePreview, setImagePreview] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [compressingImage, setCompressingImage] = useState(false);
+
+  // Client-side image compression
+  const compressImage = async (file) => {
+    console.log('🗜️  [Client-Side] Starting image compression...');
+    console.log(`   📁 Original file: ${file.name}`);
+    console.log(`   📊 Original size: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
+
+    const startTime = performance.now();
+
+    const options = {
+      maxSizeMB: 0.5, // Max file size: 500 KB
+      maxWidthOrHeight: 1920, // Max dimension: 1920px
+      useWebWorker: true, // Use web worker for better performance
+      fileType: 'image/webp', // Convert to WebP for better compression
+      initialQuality: 0.8 // 80% quality
+    };
+
+    try {
+      const compressedFile = await imageCompression(file, options);
+
+      const endTime = performance.now();
+      const compressionTime = ((endTime - startTime) / 1000).toFixed(2);
+      const compressionRatio = ((1 - compressedFile.size / file.size) * 100).toFixed(1);
+
+      console.log('✅ [Client-Side] Compression successful!');
+      console.log(`   📊 Compressed size: ${(compressedFile.size / 1024 / 1024).toFixed(2)} MB`);
+      console.log(`   📉 Reduction: ${compressionRatio}%`);
+      console.log(`   ⏱️  Compression time: ${compressionTime} seconds`);
+      console.log(`   🚀 Upload will be ${compressionRatio}% faster!`);
+
+      return compressedFile;
+    } catch (error) {
+      console.error('❌ [Client-Side] Compression failed:', error);
+      console.log('⚠️  Will upload original file');
+      return file; // Return original if compression fails
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -38,22 +78,72 @@ export default function AddProduct() {
     }
   };
 
-  const uploadImage = async (file) => {
-    const formData = new FormData();
-    formData.append('image', file);
-    formData.append('key', 'c391e5235b9f0906fe380224c395aec8');
+  const uploadImageToImageKit = async (file) => {
+    console.log('📤 [ImageKit] Starting image upload...');
+    console.log(`   📁 File: ${file.name}`);
+    console.log(`   📊 Size: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
 
-    const response = await fetch('https://api.imgbb.com/1/upload', {
-      method: 'POST',
-      body: formData
+    const startTime = performance.now();
+
+    return new Promise((resolve, reject) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('fileName', file.name);
+      formData.append('folder', '/products'); // Organize in products folder
+
+      // Get authentication parameters
+      fetch('/api/imagekit-auth')
+        .then(res => res.json())
+        .then(auth => {
+          formData.append('signature', auth.signature);
+          formData.append('expire', auth.expire);
+          formData.append('token', auth.token);
+          formData.append('publicKey', 'public_Ov6emI8Heo9zwhCL3fisp5zmMk8=');
+
+          // Upload to ImageKit
+          return fetch('https://upload.imagekit.io/api/v1/files/upload', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Basic ' + btoa('private_9g8G+/Inx2/KGc15ZwB6s62sHhA=' + ':')
+            },
+            body: formData
+          });
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to upload image to ImageKit');
+          }
+          return response.json();
+        })
+        .then(data => {
+          const endTime = performance.now();
+          const uploadTime = ((endTime - startTime) / 1000).toFixed(2);
+
+          console.log('✅ [ImageKit] Image uploaded successfully!');
+          console.log(`   ⏱️  Upload time: ${uploadTime} seconds`);
+          console.log(`   🔗 URL: ${data.url}`);
+          console.log(`   📦 File ID: ${data.fileId}`);
+          console.log(`   📏 Dimensions: ${data.width}x${data.height}px`);
+
+          // Return the filePath (not full URL) - we'll use IKImage to display
+          resolve({
+            url: data.url,
+            filePath: data.filePath, // This is what we'll store in Firestore
+            fileId: data.fileId,
+            width: data.width,
+            height: data.height
+          });
+        })
+        .catch(error => {
+          const endTime = performance.now();
+          const uploadTime = ((endTime - startTime) / 1000).toFixed(2);
+
+          console.error('❌ [ImageKit] Upload failed');
+          console.error(`   ⏱️  Failed after: ${uploadTime} seconds`);
+          console.error(`   Error:`, error);
+          reject(error);
+        });
     });
-
-    if (!response.ok) {
-      throw new Error('Failed to upload image');
-    }
-
-    const data = await response.json();
-    return data.data.url;
   };
 
   const handleModelChange = (index, field, value) => {
@@ -120,15 +210,28 @@ export default function AddProduct() {
 
       // Upload image if selected
       if (formData.image) {
+        // Step 1: Compress image client-side
+        setCompressingImage(true);
+        console.log('🗜️  Step 1: Compressing image on your device...');
+        const compressedImage = await compressImage(formData.image);
+        setCompressingImage(false);
+
+        // Step 2: Upload compressed image to ImageKit
         setUploadingImage(true);
-        imageUrl = await uploadImage(formData.image);
+        console.log('📤 Step 2: Uploading compressed image to ImageKit...');
+
+        const imageKitData = await uploadImageToImageKit(compressedImage);
+        imageUrl = imageKitData.url; // Store full URL (works for both IKImage and regular img)
+
+        console.log('✅ Upload complete! URL:', imageUrl);
+        console.log('🎉 Image is now: Compressed → Uploaded → Optimized by ImageKit!');
         setUploadingImage(false);
       }
 
       const db = getFirestore();
       const docRef = await addDoc(collection(db, 'products'), {
         ...formData,
-        image: imageUrl,
+        image: imageUrl, // Single field: full URL (works with ImageKitImage component)
         price: parseFloat(formData.price) || 0,
         features: formData.features.split(',').map(f => f.trim()),
         applications: formData.applications.split(',').map(a => a.trim()),
@@ -136,7 +239,9 @@ export default function AddProduct() {
         createdAt: new Date()
       });
 
-      setMessage(`Product added successfully with ID: ${docRef.id}`);
+      setMessage(`✅ Product added successfully with ID: ${docRef.id}`);
+      console.log('🎉 Product saved to Firestore with ImageKit image!');
+
       setFormData({
         name: '',
         description: '',
@@ -149,8 +254,8 @@ export default function AddProduct() {
       });
       setImagePreview('');
     } catch (error) {
-      console.error('Error adding product:', error);
-      setMessage('Error adding product. Please try again.');
+      console.error('❌ Error adding product:', error);
+      setMessage('❌ Error adding product. Please try again.');
     } finally {
       setLoading(false);
       setUploadingImage(false);
@@ -311,8 +416,15 @@ export default function AddProduct() {
                 />
               </div>
             )}
+            {compressingImage && (
+              <p style={{ marginTop: '10px', color: '#ff9800', fontWeight: 'bold' }}>
+                🗜️  Compressing image on your device...
+              </p>
+            )}
             {uploadingImage && (
-              <p style={{ marginTop: '10px', color: '#007bff' }}>Uploading image...</p>
+              <p style={{ marginTop: '10px', color: '#007bff', fontWeight: 'bold' }}>
+                📤 Uploading compressed image to ImageKit...
+              </p>
             )}
           </div>
 

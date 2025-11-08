@@ -10,6 +10,8 @@ import '../styles/Footer.css';
 import '../styles/ThemeToggle.css';
 import 'leaflet/dist/leaflet.css';
 import { initializeApp, getApps } from 'firebase/app';
+import { IKContext } from 'imagekitio-react';
+import { imagekitConfig } from '../config/imagekit';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCItEyEDk97qE8Wfdw4YBX4UQpi27Te8tQ",
@@ -22,10 +24,16 @@ const firebaseConfig = {
 };
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+
 export default function App({ Component, pageProps }) {
   return (
-    <>
+    <IKContext
+      publicKey={imagekitConfig.publicKey}
+      urlEndpoint={imagekitConfig.urlEndpoint}
+      transformationPosition={imagekitConfig.transformationPosition}
+      authenticationEndpoint="/api/imagekit-auth"
+    >
       <Component {...pageProps} />
-    </>
+    </IKContext>
   );
 }

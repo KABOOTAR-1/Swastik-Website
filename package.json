@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "browser-image-compression": "^2.0.2",
     "firebase": "^12.5.0",
+    "imagekit": "^6.0.0",
+    "imagekitio-react": "^4.3.0",
     "leaflet": "^1.9.4",
     "next": "^16.0.1",
     "react": "^19.2.0",
