@@ -10,6 +10,7 @@ export default function AddProduct() {
     category: '',
     price: '',
     features: '',
+    applications: '',
     models: [{ name: '', specs: [{ label: '', value: '' }] }]
   });
   const [loading, setLoading] = useState(false);
@@ -130,6 +131,7 @@ export default function AddProduct() {
         image: imageUrl,
         price: parseFloat(formData.price) || 0,
         features: formData.features.split(',').map(f => f.trim()),
+        applications: formData.applications.split(',').map(a => a.trim()),
         models: formData.models.filter(model => model.name.trim() !== ''),
         createdAt: new Date()
       });
@@ -142,6 +144,7 @@ export default function AddProduct() {
         category: '',
         price: '',
         features: '',
+        applications: '',
         models: [{ name: '', specs: [{ label: '', value: '' }] }]
       });
       setImagePreview('');
@@ -155,212 +158,316 @@ export default function AddProduct() {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
+    <>
       <Head>
         <title>Add Product - Internal</title>
       </Head>
+      <style jsx>{`
+        .container {
+          padding: 20px;
+          max-width: 800px;
+          margin: 0 auto;
+        }
+        
+        .spec-row {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          margin-bottom: 10px;
+        }
+        
+        .spec-input {
+          flex: 1;
+          padding: 8px;
+          min-width: 0;
+          box-sizing: border-box;
+        }
+        
+        .delete-btn {
+          background-color: #dc3545;
+          color: white;
+          border: none;
+          padding: 8px;
+          border-radius: 4px;
+          cursor: pointer;
+          flex-shrink: 0;
+          min-width: 32px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .spec-label-container {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 10px;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+        
+        .spec-label-container label {
+          margin: 0;
+          flex-shrink: 0;
+        }
+        
+        @media (max-width: 600px) {
+          .container {
+            padding: 10px;
+          }
+          
+          .spec-row {
+            gap: 5px;
+          }
+          
+          .spec-input {
+            padding: 6px;
+            font-size: 14px;
+          }
+          
+          .delete-btn {
+            padding: 6px;
+            min-width: 28px;
+            height: 36px;
+            font-size: 16px;
+          }
+          
+          .spec-label-container {
+            gap: 8px;
+          }
+        }
+        
+        @media (max-width: 400px) {
+          .spec-input {
+            padding: 5px;
+            font-size: 13px;
+          }
+          
+          .delete-btn {
+            padding: 5px;
+            min-width: 26px;
+            height: 34px;
+          }
+        }
+      `}</style>
+      <div className="container">
 
-      <h1>Add New Product</h1>
+        <h1>Add New Product</h1>
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        <div>
-          <label htmlFor="name">Product Name:</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-          />
-        </div>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          <div>
+            <label htmlFor="name">Product Name:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            />
+          </div>
 
-        <div>
-          <label htmlFor="description">Description:</label>
-          <textarea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-            rows="4"
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-          />
-        </div>
+          <div>
+            <label htmlFor="description">Description:</label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+              rows="4"
+              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            />
+          </div>
 
-        <div>
-          <label htmlFor="image">Product Image:</label>
-          <input
-            type="file"
-            id="image"
-            name="image"
-            accept="image/*"
-            onChange={handleChange}
-            required
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-          />
-          {imagePreview && (
-            <div style={{ marginTop: '10px' }}>
-              <img
-                src={imagePreview}
-                alt="Preview"
-                style={{ maxWidth: '200px', maxHeight: '200px', border: '1px solid #ddd', borderRadius: '4px' }}
-              />
-            </div>
-          )}
-          {uploadingImage && (
-            <p style={{ marginTop: '10px', color: '#007bff' }}>Uploading image...</p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="category">Category:</label>
-          <input
-            type="text"
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="price">Price:</label>
-          <input
-            type="number"
-            id="price"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            step="0.01"
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="features">Features (comma-separated):</label>
-          <input
-            type="text"
-            id="features"
-            name="features"
-            value={formData.features}
-            onChange={handleChange}
-            placeholder="Feature 1, Feature 2, Feature 3"
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-          />
-        </div>
-
-        {/* Models Section */}
-        <div style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '4px' }}>
-          <h3>Product Models</h3>
-          {formData.models.map((model, modelIndex) => (
-            <div key={modelIndex} style={{ marginBottom: '20px', padding: '10px', border: '1px solid #eee', borderRadius: '4px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                <h4>Model {modelIndex + 1}</h4>
-                {formData.models.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeModel(modelIndex)}
-                    style={{ backgroundColor: '#dc3545', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}
-                  >
-                    Remove Model
-                  </button>
-                )}
-              </div>
-
-              <div style={{ marginBottom: '10px' }}>
-                <label>Model Name:</label>
-                <input
-                  type="text"
-                  value={model.name}
-                  onChange={(e) => handleModelChange(modelIndex, 'name', e.target.value)}
-                  placeholder="e.g., Model A, Standard, Premium"
-                  style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+          <div>
+            <label htmlFor="image">Product Image:</label>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              accept="image/*"
+              onChange={handleChange}
+              required
+              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            />
+            {imagePreview && (
+              <div style={{ marginTop: '10px' }}>
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  style={{ maxWidth: '200px', maxHeight: '200px', border: '1px solid #ddd', borderRadius: '4px' }}
                 />
               </div>
+            )}
+            {uploadingImage && (
+              <p style={{ marginTop: '10px', color: '#007bff' }}>Uploading image...</p>
+            )}
+          </div>
 
-              <div>
+          <div>
+            <label htmlFor="category">Category:</label>
+            <input
+              type="text"
+              id="category"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              required
+              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="price">Price:</label>
+            <input
+              type="number"
+              id="price"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              step="0.01"
+              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="features">Features (comma-separated):</label>
+            <input
+              type="text"
+              id="features"
+              name="features"
+              value={formData.features}
+              onChange={handleChange}
+              placeholder="Heavy-duty construction for multistory buildings, Advanced safety mechanisms, Ergonomic control panel"
+              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="applications">Applications (comma-separated):</label>
+            <input
+              type="text"
+              id="applications"
+              name="applications"
+              value={formData.applications}
+              onChange={handleChange}
+              placeholder="Concrete floor slabs, Foundation work, Large construction projects"
+              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            />
+          </div>
+
+          {/* Models Section */}
+          <div style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '4px' }}>
+            <h3>Product Models</h3>
+            {formData.models.map((model, modelIndex) => (
+              <div key={modelIndex} style={{ marginBottom: '20px', padding: '10px', border: '1px solid #eee', borderRadius: '4px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <label>Specifications:</label>
-                  <button
-                    type="button"
-                    onClick={() => addSpec(modelIndex)}
-                    style={{ backgroundColor: '#28a745', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}
-                  >
-                    Add Spec
-                  </button>
+                  <h4>Model {modelIndex + 1}</h4>
+                  {formData.models.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeModel(modelIndex)}
+                      style={{ backgroundColor: '#dc3545', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}
+                    >
+                      Remove Model
+                    </button>
+                  )}
                 </div>
 
-                {model.specs.map((spec, specIndex) => (
-                  <div key={specIndex} style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '10px' }}>
-                    <input
-                      type="text"
-                      placeholder="Label (e.g., Capacity)"
-                      value={spec.label}
-                      onChange={(e) => handleSpecChange(modelIndex, specIndex, 'label', e.target.value)}
-                      style={{ flex: 1, padding: '8px' }}
-                    />
-                    <input
-                      type="text"
-                      placeholder="Value (e.g., 200L)"
-                      value={spec.value}
-                      onChange={(e) => handleSpecChange(modelIndex, specIndex, 'value', e.target.value)}
-                      style={{ flex: 1, padding: '8px' }}
-                    />
-                    {model.specs.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removeSpec(modelIndex, specIndex)}
-                        style={{ backgroundColor: '#dc3545', color: 'white', border: 'none', padding: '8px', borderRadius: '4px', cursor: 'pointer' }}
-                      >
-                        ×
-                      </button>
-                    )}
+                <div style={{ marginBottom: '10px' }}>
+                  <label>Model Name:</label>
+                  <input
+                    type="text"
+                    value={model.name}
+                    onChange={(e) => handleModelChange(modelIndex, 'name', e.target.value)}
+                    placeholder="e.g., Model A, Standard, Premium"
+                    style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+                  />
+                </div>
+
+                <div>
+                  <div className="spec-label-container">
+                    <label>Specifications:</label>
+                    <button
+                      type="button"
+                      onClick={() => addSpec(modelIndex)}
+                      style={{ backgroundColor: '#28a745', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}
+                    >
+                      Add Spec
+                    </button>
                   </div>
-                ))}
+
+                  {model.specs.map((spec, specIndex) => (
+                    <div key={specIndex} className="spec-row">
+                      <input
+                        type="text"
+                        placeholder="Label (e.g., Capacity)"
+                        value={spec.label}
+                        onChange={(e) => handleSpecChange(modelIndex, specIndex, 'label', e.target.value)}
+                        className="spec-input"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Value (e.g., 200L)"
+                        value={spec.value}
+                        onChange={(e) => handleSpecChange(modelIndex, specIndex, 'value', e.target.value)}
+                        className="spec-input"
+                      />
+                      {model.specs.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeSpec(modelIndex, specIndex)}
+                          className="delete-btn"
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+
+            <button
+              type="button"
+              onClick={addModel}
+              style={{ backgroundColor: '#007bff', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}
+            >
+              Add Another Model
+            </button>
+          </div>
 
           <button
-            type="button"
-            onClick={addModel}
-            style={{ backgroundColor: '#007bff', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}
+            type="submit"
+            disabled={loading}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: loading ? '#ccc' : '#007bff',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: loading ? 'not-allowed' : 'pointer'
+            }}
           >
-            Add Another Model
+            {loading ? 'Adding...' : 'Add Product'}
           </button>
-        </div>
+        </form>
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            padding: '10px 20px',
-            backgroundColor: loading ? '#ccc' : '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: loading ? 'not-allowed' : 'pointer'
-          }}
-        >
-          {loading ? 'Adding...' : 'Add Product'}
-        </button>
-      </form>
-
-      {message && (
-        <p style={{
-          marginTop: '20px',
-          padding: '10px',
-          backgroundColor: message.includes('Error') ? '#f8d7da' : '#d4edda',
-          color: message.includes('Error') ? '#721c24' : '#155724',
-          borderRadius: '4px'
-        }}>
-          {message}
-        </p>
-      )}
-    </div>
+        {message && (
+          <p style={{
+            marginTop: '20px',
+            padding: '10px',
+            backgroundColor: message.includes('Error') ? '#f8d7da' : '#d4edda',
+            color: message.includes('Error') ? '#721c24' : '#155724',
+            borderRadius: '4px'
+          }}>
+            {message}
+          </p>
+        )}
+      </div>
+    </>
   );
 }
