@@ -8,6 +8,7 @@ import '../styles/Testimonials.css';
 import '../styles/Contact.css';
 import '../styles/Footer.css';
 import '../styles/ThemeToggle.css';
+import 'leaflet/dist/leaflet.css';
 import { initializeApp, getApps } from 'firebase/app';
 
 const firebaseConfig = {

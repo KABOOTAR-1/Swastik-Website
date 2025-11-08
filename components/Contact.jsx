@@ -1,6 +1,25 @@
 // components/Contact.jsx
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaIndustry } from 'react-icons/fa';
+
+// Dynamically import the Map component with no SSR
+const MapComponent = dynamic(() => import('./MapComponent'), {
+  ssr: false,
+  loading: () => (
+    <div style={{
+      width: '100%',
+      height: '500px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'var(--color-surface)',
+      borderRadius: 'var(--radius-md)'
+    }}>
+      <p>Loading map...</p>
+    </div>
+  )
+});
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -124,6 +143,17 @@ const Contact = () => {
 
           <button type="submit" className="btn-submit">Send Inquiry</button>
         </form>
+      </div>
+
+      {/* OpenStreetMap with Leaflet */}
+      <div className="map-section">
+        <div className="map-header">
+          <h3 className="map-title">Find Us</h3>
+          <p className="map-subtitle">Visit our corporate office or manufacturing facility</p>
+        </div>
+        <div className="map-container">
+          <MapComponent />
+        </div>
       </div>
     </section>
   );

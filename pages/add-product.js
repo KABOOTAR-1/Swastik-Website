@@ -243,11 +243,20 @@ export default function AddProduct() {
             padding: 5px;
             font-size: 13px;
           }
-          
+
           .delete-btn {
             padding: 5px;
             min-width: 26px;
             height: 34px;
+          }
+
+          .spec-row {
+            flex-direction: column;
+            gap: 5px;
+          }
+
+          .spec-input {
+            width: 100%;
           }
         }
       `}</style>

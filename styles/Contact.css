@@ -953,3 +953,203 @@ select.form-control {
     font-size: var(--font-size-lg);
   }
 }
+
+/* Map Section Styles */
+.map-section {
+  margin-top: calc(var(--space-32) * 2);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.map-header {
+  text-align: center;
+  margin-bottom: var(--space-32);
+}
+
+.map-title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-12);
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.map-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.map-container {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-card-border);
+  background: var(--color-surface);
+  padding: var(--space-8);
+  transition: all var(--duration-normal) var(--ease-standard);
+}
+
+.map-container:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+
+.map-iframe {
+  width: 100%;
+  height: 500px;
+  border: 0;
+  border-radius: var(--radius-md);
+  display: block;
+}
+
+/* Leaflet Map Specific Styles */
+.leaflet-map {
+  height: 500px !important;
+  width: 100%;
+  border-radius: var(--radius-md);
+  z-index: 1;
+}
+
+/* Ensure Leaflet container has proper height */
+.map-container .leaflet-container {
+  height: 500px !important;
+  min-height: 500px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-base);
+}
+
+.map-container>div {
+  height: 500px !important;
+}
+
+/* Style Leaflet controls to match design system */
+.leaflet-control-zoom a {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border) !important;
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.leaflet-control-zoom a:hover {
+  background-color: var(--color-secondary) !important;
+}
+
+/* Custom popup styles */
+.leaflet-popup-content-wrapper {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-card-border);
+  padding: 0;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  font-family: var(--font-family-base);
+}
+
+.leaflet-popup-tip {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-card-border);
+}
+
+/* Attribution styling */
+.leaflet-control-attribution {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text-secondary) !important;
+  font-size: var(--font-size-xs) !important;
+  border-radius: var(--radius-sm) !important;
+  border: 1px solid var(--color-border) !important;
+  opacity: 0.8;
+}
+
+.leaflet-control-attribution a {
+  color: var(--color-primary) !important;
+}
+
+/* Dark mode enhancements for map */
+@media (prefers-color-scheme: dark) {
+  .map-container {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3),
+      0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  }
+
+  .map-container:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4),
+      0 10px 10px -5px rgba(0, 0, 0, 0.3);
+  }
+}
+
+[data-color-scheme="dark"] .map-container {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3),
+    0 4px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+[data-color-scheme="dark"] .map-container:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4),
+    0 10px 10px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive styles for map */
+@media (max-width: 768px) {
+  .map-section {
+    margin-top: calc(var(--space-32) * 1.5);
+    padding: 0 var(--space-20);
+  }
+
+  .map-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .map-subtitle {
+    font-size: var(--font-size-base);
+  }
+
+  .map-iframe,
+  .leaflet-map,
+  .map-container .leaflet-container,
+  .map-container>div {
+    height: 400px !important;
+    min-height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .map-section {
+    margin-top: var(--space-32);
+    padding: 0 var(--space-16);
+  }
+
+  .map-header {
+    margin-bottom: var(--space-24);
+  }
+
+  .map-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .map-subtitle {
+    font-size: var(--font-size-sm);
+  }
+
+  .map-container {
+    padding: var(--space-6);
+  }
+
+  .map-iframe,
+  .leaflet-map,
+  .map-container .leaflet-container,
+  .map-container>div {
+    height: 300px !important;
+    min-height: 300px;
+    border-radius: var(--radius-sm);
+  }
+}
