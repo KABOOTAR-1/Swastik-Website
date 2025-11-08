@@ -1,10 +1,11 @@
 // ImageKit Configuration
+// Using environment variables for security
 export const imagekitConfig = {
-    publicKey: "public_Ov6emI8Heo9zwhCL3fisp5zmMk8=",
-    urlEndpoint: "https://ik.imagekit.io/iqspecenu",
+    publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY,
+    urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT,
     transformationPosition: "path",
-    // For server-side operations (upload)
-    privateKey: "private_9g8G+/Inx2/KGc15ZwB6s62sHhA=",
+    // Note: privateKey should ONLY be used server-side (API routes)
+    // Never expose it in client-side code
 };
 
 // Default transformation for product images

@@ -3,9 +3,9 @@
 const ImageKit = require('imagekit');
 
 const imagekit = new ImageKit({
-  publicKey: "public_Ov6emI8Heo9zwhCL3fisp5zmMk8=",
-  privateKey: "private_9g8G+/Inx2/KGc15ZwB6s62sHhA=",
-  urlEndpoint: "https://ik.imagekit.io/iqspecenu"
+  publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY,
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+  urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT
 });
 
 export default function handler(req, res) {

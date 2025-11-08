@@ -14,13 +14,13 @@ import { IKContext } from 'imagekitio-react';
 import { imagekitConfig } from '../config/imagekit';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCItEyEDk97qE8Wfdw4YBX4UQpi27Te8tQ",
-  authDomain: "swastik-website-c6008.firebaseapp.com",
-  projectId: "swastik-website-c6008",
-  storageBucket: "swastik-website-c6008.firebasestorage.app",
-  messagingSenderId: "771800332315",
-  appId: "1:771800332315:web:4d52c3e5673d27c313a0be",
-  measurementId: "G-THBPJXB801"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
