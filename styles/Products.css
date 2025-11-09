@@ -126,11 +126,11 @@
     --space-32: 32px;
 
     /* Border Radius */
-    --radius-sm: 6px;
-    --radius-base: 8px;
-    --radius-md: 10px;
-    --radius-lg: 12px;
-    --radius-full: 9999px;
+    --radius-sm: 0;
+    --radius-base: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+    --radius-full: 0;
 
     /* Shadows */
     --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
@@ -599,33 +599,49 @@ select.form-control {
 }
 
 .status--success {
-    background-color: rgba(var(--color-success-rgb, 33, 128, 141),
-            var(--status-bg-opacity));
+    background-color: rgba(
+        var(--color-success-rgb, 33, 128, 141),
+        var(--status-bg-opacity)
+    );
     color: var(--color-success);
-    border: 1px solid rgba(var(--color-success-rgb, 33, 128, 141),
-            var(--status-border-opacity));
+    border: 1px solid
+        rgba(
+            var(--color-success-rgb, 33, 128, 141),
+            var(--status-border-opacity)
+        );
 }
 
 .status--error {
-    background-color: rgba(var(--color-error-rgb, 192, 21, 47),
-            var(--status-bg-opacity));
+    background-color: rgba(
+        var(--color-error-rgb, 192, 21, 47),
+        var(--status-bg-opacity)
+    );
     color: var(--color-error);
-    border: 1px solid rgba(var(--color-error-rgb, 192, 21, 47), var(--status-border-opacity));
+    border: 1px solid
+        rgba(var(--color-error-rgb, 192, 21, 47), var(--status-border-opacity));
 }
 
 .status--warning {
-    background-color: rgba(var(--color-warning-rgb, 168, 75, 47),
-            var(--status-bg-opacity));
+    background-color: rgba(
+        var(--color-warning-rgb, 168, 75, 47),
+        var(--status-bg-opacity)
+    );
     color: var(--color-warning);
-    border: 1px solid rgba(var(--color-warning-rgb, 168, 75, 47),
-            var(--status-border-opacity));
+    border: 1px solid
+        rgba(
+            var(--color-warning-rgb, 168, 75, 47),
+            var(--status-border-opacity)
+        );
 }
 
 .status--info {
-    background-color: rgba(var(--color-info-rgb, 98, 108, 113),
-            var(--status-bg-opacity));
+    background-color: rgba(
+        var(--color-info-rgb, 98, 108, 113),
+        var(--status-bg-opacity)
+    );
     color: var(--color-info);
-    border: 1px solid rgba(var(--color-info-rgb, 98, 108, 113), var(--status-border-opacity));
+    border: 1px solid
+        rgba(var(--color-info-rgb, 98, 108, 113), var(--status-border-opacity));
 }
 
 /* Container layout */
@@ -773,7 +789,8 @@ select.form-control {
 
 @font-face {
     font-family: "FKGroteskNeue";
-    src: url("https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2") format("woff2");
+    src: url("https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2")
+        format("woff2");
 }
 
 /* END PERPLEXITY DESIGN SYSTEM */
@@ -1387,9 +1404,11 @@ select.form-control {
     }
 
     .models-table thead {
-        background: linear-gradient(135deg,
-                var(--color-primary) 0%,
-                #0056b3 100%);
+        background: linear-gradient(
+            135deg,
+            var(--color-primary) 0%,
+            #0056b3 100%
+        );
     }
 
     .models-table tbody tr:hover {
@@ -1491,10 +1510,12 @@ select.form-control {
 
 /* Skeleton Loader Styles */
 .skeleton {
-    background: linear-gradient(90deg,
-            var(--color-secondary) 25%,
-            var(--color-background) 50%,
-            var(--color-secondary) 75%);
+    background: linear-gradient(
+        90deg,
+        var(--color-secondary) 25%,
+        var(--color-background) 50%,
+        var(--color-secondary) 75%
+    );
     background-size: 200% 100%;
     animation: skeleton-loading 1.5s ease-in-out infinite;
     border-radius: var(--radius-sm);
