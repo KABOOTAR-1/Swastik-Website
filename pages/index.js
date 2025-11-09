@@ -22,8 +22,10 @@ export default function Home() {
         if (targetElement) {
           const header = document.querySelector('.header');
           const headerHeight = header ? header.offsetHeight : 80;
-          const elementPosition = targetElement.offsetTop;
+          const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
           const offsetPosition = elementPosition - headerHeight;
+
+          console.log('Scrolling to:', targetId, 'Position:', offsetPosition);
 
           // Set flag to disable scroll spy during programmatic scroll
           isScrollingToHash = true;
@@ -39,9 +41,13 @@ export default function Home() {
           });
 
           // Re-enable scroll spy after scroll animation completes
+          // Increased timeout to ensure scroll completes before re-enabling spy
           scrollTimeout = setTimeout(() => {
             isScrollingToHash = false;
-          }, useSmooth ? 1000 : 100);
+            console.log('Scroll complete, spy re-enabled');
+          }, useSmooth ? 1500 : 100);
+        } else {
+          console.log('Target element not found:', targetId);
         }
       }
     };
@@ -56,10 +62,35 @@ export default function Home() {
       // Scroll to top immediately to prevent browser's default scroll
       window.scrollTo(0, 0);
 
-      // Use setTimeout to ensure DOM is fully loaded, then scroll instantly
-      setTimeout(() => {
-        scrollToHash(window.location.hash, false);
-      }, 100);
+      // Set flag immediately to prevent scroll spy interference
+      isScrollingToHash = true;
+
+      // Wait for the entire page (including images) to load
+      const handlePageLoad = () => {
+        console.log('Page fully loaded, waiting for products and images to load...');
+        const targetId = window.location.hash.substring(1);
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+          // Wait 1.5 seconds for all products, images, and layout to fully settle
+          setTimeout(() => {
+            console.log('Delay complete, now scrolling to:', targetId);
+            scrollToHash(window.location.hash, true);
+          }, 400); // 1.5 seconds delay
+        } else {
+          console.log('Target element not found after page load:', targetId);
+          isScrollingToHash = false;
+        }
+      };
+
+      // Check if page is already loaded
+      if (document.readyState === 'complete') {
+        // Page already loaded, start delay
+        handlePageLoad();
+      } else {
+        // Wait for page to fully load
+        window.addEventListener('load', handlePageLoad, { once: true });
+      }
     } else {
       window.scrollTo(0, 0);
     }
@@ -99,6 +130,7 @@ export default function Home() {
         if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
           const newHash = `#${sectionId}`;
           if (window.location.hash !== newHash) {
+            console.log('Scroll spy changing hash from', window.location.hash, 'to', newHash);
             window.history.pushState({}, '', `/${newHash}`);
           }
         }

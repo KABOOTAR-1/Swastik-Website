@@ -599,49 +599,33 @@ select.form-control {
 }
 
 .status--success {
-    background-color: rgba(
-        var(--color-success-rgb, 33, 128, 141),
-        var(--status-bg-opacity)
-    );
+    background-color: rgba(var(--color-success-rgb, 33, 128, 141),
+            var(--status-bg-opacity));
     color: var(--color-success);
-    border: 1px solid
-        rgba(
-            var(--color-success-rgb, 33, 128, 141),
-            var(--status-border-opacity)
-        );
+    border: 1px solid rgba(var(--color-success-rgb, 33, 128, 141),
+            var(--status-border-opacity));
 }
 
 .status--error {
-    background-color: rgba(
-        var(--color-error-rgb, 192, 21, 47),
-        var(--status-bg-opacity)
-    );
+    background-color: rgba(var(--color-error-rgb, 192, 21, 47),
+            var(--status-bg-opacity));
     color: var(--color-error);
-    border: 1px solid
-        rgba(var(--color-error-rgb, 192, 21, 47), var(--status-border-opacity));
+    border: 1px solid rgba(var(--color-error-rgb, 192, 21, 47), var(--status-border-opacity));
 }
 
 .status--warning {
-    background-color: rgba(
-        var(--color-warning-rgb, 168, 75, 47),
-        var(--status-bg-opacity)
-    );
+    background-color: rgba(var(--color-warning-rgb, 168, 75, 47),
+            var(--status-bg-opacity));
     color: var(--color-warning);
-    border: 1px solid
-        rgba(
-            var(--color-warning-rgb, 168, 75, 47),
-            var(--status-border-opacity)
-        );
+    border: 1px solid rgba(var(--color-warning-rgb, 168, 75, 47),
+            var(--status-border-opacity));
 }
 
 .status--info {
-    background-color: rgba(
-        var(--color-info-rgb, 98, 108, 113),
-        var(--status-bg-opacity)
-    );
+    background-color: rgba(var(--color-info-rgb, 98, 108, 113),
+            var(--status-bg-opacity));
     color: var(--color-info);
-    border: 1px solid
-        rgba(var(--color-info-rgb, 98, 108, 113), var(--status-border-opacity));
+    border: 1px solid rgba(var(--color-info-rgb, 98, 108, 113), var(--status-border-opacity));
 }
 
 /* Container layout */
@@ -789,8 +773,7 @@ select.form-control {
 
 @font-face {
     font-family: "FKGroteskNeue";
-    src: url("https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2")
-        format("woff2");
+    src: url("https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2") format("woff2");
 }
 
 /* END PERPLEXITY DESIGN SYSTEM */
@@ -1404,11 +1387,9 @@ select.form-control {
     }
 
     .models-table thead {
-        background: linear-gradient(
-            135deg,
-            var(--color-primary) 0%,
-            #0056b3 100%
-        );
+        background: linear-gradient(135deg,
+                var(--color-primary) 0%,
+                #0056b3 100%);
     }
 
     .models-table tbody tr:hover {
@@ -1506,4 +1487,96 @@ select.form-control {
     .models-table thead th:first-child {
         font-size: 8px;
     }
+}
+
+/* Skeleton Loader Styles */
+.skeleton {
+    background: linear-gradient(90deg,
+            var(--color-secondary) 25%,
+            var(--color-background) 50%,
+            var(--color-secondary) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s ease-in-out infinite;
+    border-radius: var(--radius-sm);
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skeleton-card {
+    pointer-events: none;
+    min-height: 550px;
+}
+
+.skeleton-card .product-info {
+    min-height: 330px;
+    display: flex;
+    flex-direction: column;
+}
+
+.skeleton-image {
+    width: 100%;
+    height: 200px;
+    border-radius: 0;
+}
+
+.skeleton-title {
+    height: 28px;
+    width: 85%;
+    margin-bottom: var(--space-12);
+}
+
+.skeleton-description {
+    height: 14px;
+    width: 100%;
+    margin-bottom: var(--space-6);
+}
+
+.skeleton-description:nth-of-type(2) {
+    width: 100%;
+}
+
+.skeleton-description:nth-of-type(3) {
+    width: 95%;
+}
+
+.skeleton-description:nth-of-type(4) {
+    width: 100%;
+}
+
+.skeleton-description-last {
+    width: 65%;
+    margin-bottom: var(--space-24);
+}
+
+.skeleton-card .product-specs {
+    margin-bottom: var(--space-24);
+}
+
+.skeleton-card .spec-item {
+    background: var(--color-background);
+    padding: var(--space-10);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    min-height: 65px;
+    display: flex;
+    align-items: center;
+}
+
+.skeleton-spec {
+    height: 40px;
+    width: 100%;
+}
+
+.skeleton-button {
+    height: 50px;
+    width: 100%;
+    margin-top: auto;
 }

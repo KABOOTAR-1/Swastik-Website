@@ -8,6 +8,29 @@ import ProductIcon from '../components/ProductIcon';
 import ImageKitImage from '../components/ImageKitImage';
 import { productImageTransformations } from '../config/imagekit';
 
+// Skeleton loader component for product cards
+const ProductSkeleton = () => (
+  <div className="product-card skeleton-card">
+    <div className="product-image skeleton skeleton-image"></div>
+    <div className="product-info">
+      <div className="skeleton skeleton-title"></div>
+      <div className="skeleton skeleton-description"></div>
+      <div className="skeleton skeleton-description"></div>
+      <div className="skeleton skeleton-description"></div>
+      <div className="skeleton skeleton-description skeleton-description-last"></div>
+      <div className="product-specs">
+        <div className="spec-item">
+          <div className="skeleton skeleton-spec"></div>
+        </div>
+        <div className="spec-item">
+          <div className="skeleton skeleton-spec"></div>
+        </div>
+      </div>
+      <div className="skeleton skeleton-button"></div>
+    </div>
+  </div>
+);
+
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
 
@@ -49,79 +72,84 @@ const ProductsPage = () => {
             <h1 className="page-title">Our Products</h1>
             <p className="page-subtitle">Comprehensive range of quality machinery for agricultural and construction needs</p>
 
-            {products.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-                <p>Loading products...</p>
-              </div>
-            ) : (
-              <div className="products-full-grid">
-                {products.map((product) => (
-                  <div key={product.id} className="product-card">
-                    <div className="product-image" style={{ position: 'relative', backgroundColor: '#f0f0f0' }}>
-                      {product.image ? (
-                        (() => {
-                          const startTime = performance.now();
-                          console.log(`🖼️ [Products Page] Started loading image for: ${product.name}`);
-                          console.log(`   📸 Image URL: ${product.image}`);
-                          console.log(`   ⏱️  Start time: ${new Date().toLocaleTimeString()}`);
-                          console.log(`   🔄 Loading via ImageKit with auto-optimization`);
-                          return (
-                            <ImageKitImage
-                              src={product.image}
-                              alt={product.name}
-                              transformation={productImageTransformations}
-                              style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover',
-                                opacity: 0,
-                                transition: 'opacity 0.3s ease-in'
-                              }}
-                              loading="lazy"
-                              onLoad={(e) => {
-                                const endTime = performance.now();
-                                const loadTime = ((endTime - startTime) / 1000).toFixed(2);
-                                console.log(`✅ [Products Page] Successfully loaded image for: ${product.name}`);
-                                console.log(`   ⏱️  Load time: ${loadTime} seconds`);
-                                console.log(`   🚀 ImageKit optimized & CDN delivered`);
-                                console.log(`   ✨ Image now visible to user`);
+            <div className="products-full-grid">
+              {products.length === 0 ? (
+                // Show skeleton loaders while loading
+                <>
+                  {[1, 2, 3, 4, 5, 6].map((i) => (
+                    <ProductSkeleton key={i} />
+                  ))}
+                </>
+              ) : (
+                <>
+                  {products.map((product) => (
+                    <div key={product.id} className="product-card">
+                      <div className="product-image" style={{ position: 'relative', backgroundColor: '#f0f0f0' }}>
+                        {product.image ? (
+                          (() => {
+                            const startTime = performance.now();
+                            console.log(`🖼️ [Products Page] Started loading image for: ${product.name}`);
+                            console.log(`   📸 Image URL: ${product.image}`);
+                            console.log(`   ⏱️  Start time: ${new Date().toLocaleTimeString()}`);
+                            console.log(`   🔄 Loading via ImageKit with auto-optimization`);
+                            return (
+                              <ImageKitImage
+                                src={product.image}
+                                alt={product.name}
+                                transformation={productImageTransformations}
+                                style={{
+                                  width: '100%',
+                                  height: '100%',
+                                  objectFit: 'cover',
+                                  opacity: 0,
+                                  transition: 'opacity 0.3s ease-in'
+                                }}
+                                loading="lazy"
+                                onLoad={(e) => {
+                                  const endTime = performance.now();
+                                  const loadTime = ((endTime - startTime) / 1000).toFixed(2);
+                                  console.log(`✅ [Products Page] Successfully loaded image for: ${product.name}`);
+                                  console.log(`   ⏱️  Load time: ${loadTime} seconds`);
+                                  console.log(`   🚀 ImageKit optimized & CDN delivered`);
+                                  console.log(`   ✨ Image now visible to user`);
 
-                                // Fade in the image
-                                e.target.style.opacity = '1';
-                              }}
-                              onError={(e) => {
-                                const endTime = performance.now();
-                                const loadTime = ((endTime - startTime) / 1000).toFixed(2);
-                                console.error(`❌ [Products Page] Failed to load image for: ${product.name}`);
-                                console.error(`   ⏱️  Failed after: ${loadTime} seconds`);
-                                console.error(`   Error details:`, e);
-                              }}
-                            />
-                          );
-                        })()
-                      ) : (
-                        <ProductIcon iconName={product.iconName} />
-                      )}
-                    </div>
-                    <div className="product-info">
-                      <div className="product-name">{product.name}</div>
-                      <div className="product-description">{product.description}</div>
-                      <div className="product-specs">
-                        {product.specs.map((spec, index) => (
-                          <div key={index} className="spec-item">
-                            <div className="spec-label">{spec.label}</div>
-                            <div>{spec.value}</div>
-                          </div>
-                        ))}
+                                  // Fade in the image
+                                  e.target.style.opacity = '1';
+                                }}
+                                onError={(e) => {
+                                  const endTime = performance.now();
+                                  const loadTime = ((endTime - startTime) / 1000).toFixed(2);
+                                  console.error(`❌ [Products Page] Failed to load image for: ${product.name}`);
+                                  console.error(`   ⏱️  Failed after: ${loadTime} seconds`);
+                                  console.error(`   Error details:`, e);
+                                }}
+                              />
+                            );
+                          })()
+                        ) : (
+                          <ProductIcon iconName={product.iconName} />
+                        )}
                       </div>
-                      <Link href={`/products/${product.id}`} className="btn-learn-more">
-                        Learn More
-                      </Link>
+                      <div className="product-info">
+                        <div className="product-name">{product.name}</div>
+                        <div className="product-description">{product.description}</div>
+                        <div className="product-specs">
+                          {product.specs.map((spec, index) => (
+                            <div key={index} className="spec-item">
+                              <div className="spec-label">{spec.label}</div>
+                              <div>{spec.value}</div>
+                            </div>
+                          ))}
+                        </div>
+                        <Link href={`/products/${product.id}`} className="btn-learn-more">
+                          Learn More
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                  ))}
+                </>
+              )}
+            </div>
           </div>
         </section>
       </main>
