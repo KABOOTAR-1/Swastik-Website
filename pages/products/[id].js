@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import Head from 'next/head';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
-import { FaArrowLeft } from 'react-icons/fa';
-import Link from 'next/link';
-import { fetchProducts } from '../../data/products';
-import ProductIcon from '../../components/ProductIcon';
-import ImageKitImage from '../../components/ImageKitImage';
-import { detailImageTransformations } from '../../config/imagekit';
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import Head from "next/head";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import { FaArrowLeft } from "react-icons/fa";
+import Link from "next/link";
+import { fetchProducts } from "../../data/products";
+import ProductIcon from "../../components/ProductIcon";
+import ImageKitImage from "../../components/ImageKitImage";
+import { detailImageTransformations } from "../../config/imagekit";
 
 const ProductDetailPage = () => {
   const router = useRouter();
@@ -25,12 +25,12 @@ const ProductDetailPage = () => {
       try {
         const products = await fetchProducts();
         // Try to match by string ID first (Firebase), then by numeric ID (fallback)
-        const foundProduct = products.find(p =>
-          p.id === id || p.id === parseInt(id)
+        const foundProduct = products.find(
+          (p) => p.id === id || p.id === parseInt(id),
         );
         setProduct(foundProduct || null);
       } catch (error) {
-        console.error('Error loading product:', error);
+        console.error("Error loading product:", error);
         setProduct(null);
       } finally {
         setLoading(false);
@@ -47,7 +47,13 @@ const ProductDetailPage = () => {
           <title>Loading... - Swastik Krishi Yantra Udyog</title>
         </Head>
         <Header />
-        <main style={{ padding: '100px 20px', textAlign: 'center', minHeight: '60vh' }}>
+        <main
+          style={{
+            padding: "100px 20px",
+            textAlign: "center",
+            minHeight: "60vh",
+          }}
+        >
           <p>Loading product details...</p>
         </main>
         <Footer />
@@ -62,7 +68,13 @@ const ProductDetailPage = () => {
           <title>Product Not Found - Swastik Krishi Yantra Udyog</title>
         </Head>
         <Header />
-        <main style={{ padding: '100px 20px', textAlign: 'center', minHeight: '60vh' }}>
+        <main
+          style={{
+            padding: "100px 20px",
+            textAlign: "center",
+            minHeight: "60vh",
+          }}
+        >
           <h1>Product Not Found</h1>
           <p>The product you're looking for doesn't exist.</p>
           <Link href="/products" className="btn-primary">
@@ -84,7 +96,7 @@ const ProductDetailPage = () => {
 
       <Header />
 
-      <main style={{ paddingTop: '4vmin' }}>
+      <main style={{ paddingTop: "4vmin" }}>
         <section className="product-detail">
           <div className="container">
             <div className="product-detail-content">
@@ -94,44 +106,69 @@ const ProductDetailPage = () => {
                 </Link>
               </div>
               <div className="product-detail-header">
-                <div className="product-icon-large" style={{ position: 'relative', backgroundColor: '#f0f0f0' }}>
+                <div
+                  className="product-icon-large"
+                  style={{ position: "relative", backgroundColor: "#f0f0f0" }}
+                >
                   {product.image ? (
                     (() => {
                       const startTime = performance.now();
-                      console.log(`🖼️ [Product Detail] Started loading image for: ${product.name}`);
+                      console.log(
+                        `🖼️ [Product Detail] Started loading image for: ${product.name}`,
+                      );
                       console.log(`   📸 Image URL: ${product.image}`);
-                      console.log(`   ⏱️  Start time: ${new Date().toLocaleTimeString()}`);
-                      console.log(`   🔄 Loading via ImageKit with high-quality optimization`);
+                      console.log(
+                        `   ⏱️  Start time: ${new Date().toLocaleTimeString()}`,
+                      );
+                      console.log(
+                        `   🔄 Loading via ImageKit with high-quality optimization`,
+                      );
                       return (
                         <ImageKitImage
                           src={product.image}
                           alt={product.name}
                           transformation={detailImageTransformations}
                           style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            borderRadius: '8px',
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            borderRadius: "8px",
                             opacity: 0,
-                            transition: 'opacity 0.3s ease-in'
+                            transition: "opacity 0.3s ease-in",
                           }}
                           loading="eager"
                           onLoad={(e) => {
                             const endTime = performance.now();
-                            const loadTime = ((endTime - startTime) / 1000).toFixed(2);
-                            console.log(`✅ [Product Detail] Successfully loaded image for: ${product.name}`);
-                            console.log(`   ⏱️  Load time: ${loadTime} seconds`);
-                            console.log(`   🚀 ImageKit optimized & CDN delivered`);
+                            const loadTime = (
+                              (endTime - startTime) /
+                              1000
+                            ).toFixed(2);
+                            console.log(
+                              `✅ [Product Detail] Successfully loaded image for: ${product.name}`,
+                            );
+                            console.log(
+                              `   ⏱️  Load time: ${loadTime} seconds`,
+                            );
+                            console.log(
+                              `   🚀 ImageKit optimized & CDN delivered`,
+                            );
                             console.log(`   ✨ Image now visible to user`);
 
                             // Fade in the image
-                            e.target.style.opacity = '1';
+                            e.target.style.opacity = "1";
                           }}
                           onError={(e) => {
                             const endTime = performance.now();
-                            const loadTime = ((endTime - startTime) / 1000).toFixed(2);
-                            console.error(`❌ [Product Detail] Failed to load image for: ${product.name}`);
-                            console.error(`   ⏱️  Failed after: ${loadTime} seconds`);
+                            const loadTime = (
+                              (endTime - startTime) /
+                              1000
+                            ).toFixed(2);
+                            console.error(
+                              `❌ [Product Detail] Failed to load image for: ${product.name}`,
+                            );
+                            console.error(
+                              `   ⏱️  Failed after: ${loadTime} seconds`,
+                            );
                             console.error(`   Error details:`, e);
                           }}
                         />
@@ -143,9 +180,17 @@ const ProductDetailPage = () => {
                 </div>
                 <div className="product-info-main">
                   <h1>{product.name}</h1>
-                  <p className="product-description-full">{product.description}</p>
+                  <p className="product-description-full">
+                    {product.description}
+                  </p>
                   {product.category && (
-                    <p style={{ marginTop: '10px', color: '#666', fontSize: '14px' }}>
+                    <p
+                      style={{
+                        marginTop: "10px",
+                        color: "#666",
+                        fontSize: "14px",
+                      }}
+                    >
                       <strong>Category:</strong> {product.category}
                     </p>
                   )}
@@ -155,21 +200,71 @@ const ProductDetailPage = () => {
               <div className="product-detail-grid">
                 {/* Show models if available (Firebase products) */}
                 {product.models && product.models.length > 0 ? (
-                  <div className="product-specifications product-models-section" style={{ gridColumn: '1 / -1' }}>
+                  <div
+                    className="product-specifications product-models-section"
+                    style={{ gridColumn: "1 / -1" }}
+                  >
                     <h2>Available Models</h2>
-                    {product.models.map((model, modelIndex) => (
-                      <div key={modelIndex} className="model-card">
-                        <h3 className="model-name">{model.name}</h3>
-                        <div className="specs-grid">
-                          {model.specs && model.specs.map((spec, specIndex) => (
-                            <div key={specIndex} className="spec-item-detail">
-                              <div className="spec-label-detail">{spec.label}</div>
-                              <div className="spec-value-detail">{spec.value}</div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
+                    <div className="models-table-container">
+                      <table className="models-table">
+                        <thead>
+                          <tr>
+                            <th className="spec-header-cell">Specification</th>
+                            {product.models.map((model, index) => (
+                              <th key={index} className="model-name-header">
+                                {model.name || `Model ${index + 1}`}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {product.models[0]?.specs &&
+                            product.models[0].specs.map((spec, specIndex) => {
+                              // Get all values for this spec across all models
+                              const values = product.models.map(
+                                (model) =>
+                                  model.specs[specIndex]?.value || "N/A",
+                              );
+
+                              // Group consecutive same values with colspan
+                              const cells = [];
+                              let i = 0;
+                              while (i < values.length) {
+                                const currentValue = values[i];
+                                let colspan = 1;
+
+                                // Count consecutive cells with same value
+                                while (
+                                  i + colspan < values.length &&
+                                  values[i + colspan] === currentValue
+                                ) {
+                                  colspan++;
+                                }
+
+                                cells.push({
+                                  value: currentValue,
+                                  colspan,
+                                  index: i,
+                                });
+                                i += colspan;
+                              }
+
+                              return (
+                                <tr key={specIndex}>
+                                  <td className="spec-label-cell">
+                                    {spec.label}
+                                  </td>
+                                  {cells.map((cell, cellIndex) => (
+                                    <td key={cell.index} colSpan={cell.colspan}>
+                                      {cell.value}
+                                    </td>
+                                  ))}
+                                </tr>
+                              );
+                            })}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 ) : (
                   <div className="product-specifications">
