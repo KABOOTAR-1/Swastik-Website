@@ -1271,7 +1271,7 @@ select.form-control {
 }
 
 .models-table thead th {
-    padding: var(--space-24) var(--space-32);
+    padding: var(--space-6) var(--space-8);
     text-align: center;
     font-weight: var(--font-weight-semibold);
     font-size: 14px;
@@ -1281,7 +1281,7 @@ select.form-control {
     word-wrap: break-word;
     border-right: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    min-height: 60px;
+    min-height: auto;
     height: auto;
     vertical-align: middle;
 }
@@ -1331,13 +1331,13 @@ select.form-control {
 }
 
 .models-table tbody td {
-    padding: var(--space-20) var(--space-32);
+    padding: var(--space-6) var(--space-8);
     color: var(--color-text);
     border-right: 1px solid var(--color-border);
     white-space: normal;
     word-wrap: break-word;
     font-size: var(--font-size-base);
-    min-height: 60px;
+    min-height: auto;
     height: auto;
     vertical-align: middle;
     text-align: center;
@@ -1434,12 +1434,12 @@ select.form-control {
     }
 
     .models-table thead th {
-        padding: var(--space-14) var(--space-16);
+        padding: var(--space-6) var(--space-8);
         font-size: 11px;
     }
 
     .models-table tbody td {
-        padding: var(--space-14) var(--space-16);
+        padding: var(--space-6) var(--space-8);
     }
 
     .spec-label-cell {
@@ -1467,13 +1467,13 @@ select.form-control {
     }
 
     .models-table thead th {
-        padding: var(--space-12) var(--space-12);
+        padding: var(--space-6) var(--space-8);
         font-size: 9px;
         letter-spacing: 0.3px;
     }
 
     .models-table tbody td {
-        padding: var(--space-12) var(--space-12);
+        padding: var(--space-6) var(--space-8);
     }
 
     .spec-label-cell {
